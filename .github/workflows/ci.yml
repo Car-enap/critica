@@ -1,0 +1,52 @@
+# .github/workflows/ci.yml
+name: CI de Pruebas Automatizadas
+
+# Disparador: se ejecuta cada vez que haces 'push' a las ramas 'main' o 'develop'
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  # Trabajo para ejecutar los tests del Backend
+  test-backend:
+    runs-on: ubuntu-latest # Usará una máquina virtual con Ubuntu
+
+    steps:
+    - name: Clonar el repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # Usa la versión de Node que necesite tu proyecto
+
+    - name: Instalar dependencias del servidor
+      run: npm install
+      working-directory: ./server # Especifica el directorio del servidor
+
+    - name: Ejecutar tests del servidor
+      run: npm test
+      working-directory: ./server
+
+  # Trabajo para ejecutar los tests del Frontend
+  test-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clonar el repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Instalar dependencias del cliente
+      run: npm install
+      working-directory: ./client # Especifica el directorio del cliente
+
+    - name: Ejecutar tests del cliente
+      run: npm test
+      working-directory: ./client

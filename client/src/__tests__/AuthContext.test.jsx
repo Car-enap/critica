@@ -53,7 +53,7 @@ describe('AuthContext', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await act(async () => {
-      await result.current.login({ email: 'fail@test.com', password: 'bad' });
+      await expect(result.current.login({ email: 'fail@test.com', password: 'bad' })).rejects.toBeDefined();
     });
 
     expect(result.current.error).toBe('Credenciales inválidas');

@@ -11,7 +11,7 @@ import AvailableCoursesPage from './pages/AvailableCoursesPage.jsx';
 import StudentEvaluationPage from './pages/StudentEvaluationPage.jsx';
 import StudentsManagementPage from './pages/StudentsManagementPage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-
+//profesor
 const App = () => (
   <Routes>
     <Route path="/" element={<Navigate to="/login" replace />} />

@@ -55,7 +55,6 @@ describe('AuthContext', () => {
     await act(async () => {
       await expect(result.current.login({ email: 'fail@test.com', password: 'bad' })).rejects.toBeDefined();
     });
-
     expect(result.current.error).toBe('Credenciales inválidas');
   });
 

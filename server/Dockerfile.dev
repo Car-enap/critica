@@ -13,6 +13,8 @@ COPY package*.json ./
 # Instalar todas las dependencias (incluyendo dev)
 RUN npm install
 
+COPY . .
+
 # Exponer el puerto de la aplicación
 EXPOSE 4000
 

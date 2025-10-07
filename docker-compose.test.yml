@@ -1,0 +1,36 @@
+# docker-compose.test.yml
+# Este archivo define un entorno para ejecutar pruebas automatizadas en contenedores.
+
+services:
+  # Base de Datos de prueba, completamente aislada para no tocar datos de desarrollo.
+  mongo_test:
+    image: mongo
+    container_name: mongo_test
+
+  # "Runner" para las pruebas del Backend.
+  # Construye la imagen del servidor, pero ejecuta 'npm test' en lugar de iniciar el servidor.
+  backend-tester:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    container_name: backend-tester
+    # Se asegura que la BD esté lista antes de correr los tests.
+    depends_on:
+      - mongo_test
+    # Define las variables de entorno para el entorno de prueba.
+    environment:
+      - NODE_ENV=test
+      # IMPORTANTE: Esta URI apunta al contenedor 'mongo_test' de este mismo archivo.
+      - MONGO_URI=mongodb://mongo_test:27017/critico_test
+    # El comando que anula el CMD del Dockerfile.
+    command: ["npm", "test"]
+
+  # "Runner" para las pruebas del Frontend.
+  # Construye la imagen del cliente y ejecuta los tests.
+  frontend-tester:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: frontend-tester
+    # El comando que anula el CMD y además soluciona el problema de permisos de GitHub Actions.
+    command: ["node", "--experimental-vm-modules", "node_modules/jest/bin/jest.js"]
